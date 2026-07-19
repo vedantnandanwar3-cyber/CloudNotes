@@ -5,6 +5,9 @@ from routers.auth import router as auth_router
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends
 from security import verify_token
+from routers.notes import router as notes_router
+
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -34,3 +37,6 @@ def get_me(
         "message": "Protected Route",
         "user": payload
     }
+    
+app.include_router(auth_router)
+app.include_router(notes_router)
