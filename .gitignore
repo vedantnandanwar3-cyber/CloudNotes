@@ -1,0 +1,15 @@
+# Python
+backend/venv/
+backend/**/__pycache__/
+*.pyc
+.env
+
+# Database
+cloudnotes.db
+backend/cloudnotes.db
+
+# React
+frontend/node_modules/
+
+# VS Code
+.vscode/
