@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
-
+import math
 from database import get_db
 from models.note import Note
 from models.user import User
-from schemas.note import NoteCreate
+from schemas.note import NoteCreate, NoteResponse
 from security import verify_token
 
 router = APIRouter(
@@ -53,18 +53,39 @@ def create_note(
 
 @router.get("/")
 def get_notes(
+    page: int = 1,
+    limit: int = 10,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
-    notes = db.query(Note).filter(
+    
+    
+    
+    total_notes = db.query(Note).filter(
         Note.user_id == current_user.id
-    ).all()
+    ).count()
+    
+    total_pages = max(1, math.ceil(total_notes / limit))
+    
 
-    return notes
+    notes = (
+        db.query(Note)
+        .filter(Note.user_id == current_user.id)
+        .offset((page - 1) * limit)
+        .limit(limit)
+        .all()
+    )
+
+    return {
+        "page": page,
+        "limit": limit,
+        "total_notes": total_notes,
+        "total_pages": total_pages,
+        "notes": notes
+    }
 
 
-@router.get("/search")
+@router.get("/search", response_model=list[NoteResponse])
 def search_notes(
     q: str,
     current_user: User = Depends(get_current_user),
