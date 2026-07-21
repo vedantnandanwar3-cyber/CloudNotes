@@ -6,6 +6,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends
 from security import verify_token
 from routers.notes import router as notes_router
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -15,8 +16,18 @@ app = FastAPI(
     title="CloudNotes API",
     version="1.0.0"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 security = HTTPBearer()
-app.include_router(auth_router)
 
 @app.get("/")
 def home():
