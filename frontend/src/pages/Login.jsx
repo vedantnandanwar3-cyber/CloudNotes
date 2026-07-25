@@ -72,7 +72,15 @@ function Login() {
         </form>
 
         <p>
+
           Don't have an account?
+
+          <br />
+
+          <a href="/register">
+              Register Here
+          </a>
+
         </p>
 
       </div>
