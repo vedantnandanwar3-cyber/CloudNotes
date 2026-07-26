@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import NoteCard from "../components/NoteCard";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 function Dashboard() {
 
@@ -14,10 +16,15 @@ function Dashboard() {
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
-const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [creating, setCreating] = useState(false);
+    const [username, setUsername] = useState("");
 
     // ---------------- FETCH NOTES ----------------
 const fetchNotes = async () => {
+
+    setLoading(true);
 
     try {
 
@@ -32,12 +39,38 @@ const fetchNotes = async () => {
             }
         );
 
-        // 👇 Debug output
-        console.log("Full Response:", response.data);
-        console.table(response.data.notes);
 
         setNotes(response.data.notes);
         setTotalPages(response.data.total_pages);
+
+        setLoading(false);
+
+    } catch (error) {
+
+        console.log(error);
+
+        setLoading(false);
+    }
+
+};
+
+const fetchUser = async () => {
+
+    try {
+
+        const token = localStorage.getItem("token");
+
+        const response = await api.get("/me", {
+
+            headers: {
+
+                Authorization: `Bearer ${token}`
+
+            }
+
+        });
+
+        setUsername(response.data.user.sub);
 
     } catch (error) {
 
@@ -80,6 +113,8 @@ const searchNotes = async (query) => {
     // ---------------- CREATE NOTE ----------------
     const createNote = async () => {
 
+        setCreating(true);
+
         try {
 
             const token = localStorage.getItem("token");
@@ -97,37 +132,81 @@ const searchNotes = async (query) => {
                 }
             );
 
-            fetchNotes();
+            await fetchNotes();
 
             setTitle("");
             setContent("");
 
+            toast.success("Note created successfully 🎉");
+            setCreating(false);
+
         } catch (error) {
 
             console.log(error);
+
+            toast.error(
+                error.response?.data?.detail || "Failed to create note"
+            );
+
+            setCreating(false);
 
         }
 
     };
 
     // ---------------- DELETE NOTE ----------------
+    
     const deleteNote = async (id) => {
+
+        const result = await Swal.fire({
+
+            title: "Delete Note?",
+
+            text: "You won't be able to recover this note!",
+
+            icon: "warning",
+
+            showCancelButton: true,
+
+            confirmButtonColor: "#d33",
+
+            cancelButtonColor: "#3085d6",
+
+            confirmButtonText: "Yes, Delete",
+
+            cancelButtonText: "Cancel"
+
+        });
+
+        if (!result.isConfirmed) {
+            return;
+        }
 
         try {
 
             const token = localStorage.getItem("token");
 
             await api.delete(`/notes/${id}`, {
+
                 headers: {
+
                     Authorization: `Bearer ${token}`
+
                 }
+
             });
 
-            fetchNotes();
+            await fetchNotes();
+
+            toast.success("Note deleted successfully 🗑️");
 
         } catch (error) {
 
             console.log(error);
+
+            toast.error(
+                error.response?.data?.detail || "Failed to delete note"
+            );
 
         }
 
@@ -163,7 +242,7 @@ const searchNotes = async (query) => {
                 }
             );
 
-            fetchNotes();
+            await fetchNotes();
 
             setTitle("");
             setContent("");
@@ -171,9 +250,15 @@ const searchNotes = async (query) => {
             setEditingId(null);
             setIsEditing(false);
 
+            toast.success("Note updated successfully ✏️");
+
         } catch (error) {
 
             console.log(error);
+
+            toast.error(
+                error.response?.data?.detail || "Failed to update note"
+            );
 
         }
 
@@ -192,6 +277,8 @@ const searchNotes = async (query) => {
 
         fetchNotes();
 
+        fetchUser();
+
     }, [page]);
 
     return (
@@ -200,15 +287,32 @@ const searchNotes = async (query) => {
             <div className="dashboard-header">
 
                 <h1 className="dashboard-title">
+
                     ☁️ CloudNotes
+
                 </h1>
 
-                <button
-                    className="logout-btn"
-                    onClick={logout}
-                >
-                    Logout
-                </button>
+                <div className="header-right">
+
+                    <span className="welcome-user">
+
+                        👋 {username}
+
+                    </span>
+
+                    <button
+
+                        className="logout-btn"
+
+                        onClick={logout}
+
+                    >
+
+                        Logout
+
+                    </button>
+
+                </div>
 
             </div>
 
@@ -246,26 +350,54 @@ const searchNotes = async (query) => {
                             ? updateNote
                             : createNote
                     }
+
+                    disabled={creating}
                 >
+
                     {
-                        isEditing
-                            ? "Update Note"
-                            : "Add Note"
+                        creating
+                            ? "Creating..."
+                            : isEditing
+                                ? "Update Note"
+                                : "Add Note"
                     }
+
                 </button>
 
             </div>
 
-            {notes.map((note) => (
+            {loading ? (
 
-                <NoteCard
-                    key={note.id}
-                    note={note}
-                    onDelete={deleteNote}
-                    onEdit={startEditing}
-                />
+                <h2 className="loading-text">
+                    Loading Notes...
+                </h2>
 
-            ))}
+            ) : notes.length === 0 ? (
+
+                <div className="empty-state">
+
+                    <h2>📝</h2>
+
+                    <h3>No Notes Yet</h3>
+
+                    <p>Create your first note to get started.</p>
+
+                </div>
+
+            ) : (
+
+                notes.map((note) => (
+
+                    <NoteCard
+                        key={note.id}
+                        note={note}
+                        onDelete={deleteNote}
+                        onEdit={startEditing}
+                    />
+
+                ))
+
+            )}
 
             <div className="pagination">
 

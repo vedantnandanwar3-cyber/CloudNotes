@@ -2,6 +2,7 @@ import "./Login.css";
 import { useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ function Login() {
                 response.data.access_token
             );
 
-            console.log("Login Successful");
+            toast.success("Login Successful 🎉");
 
             navigate("/dashboard");
 
@@ -34,7 +35,11 @@ function Login() {
 
         } catch (error) {
 
-            console.log(error.response.data);
+            console.log(error);
+
+            toast.error(
+                error.response?.data?.detail || "Login Failed"
+            );
 
         }
 

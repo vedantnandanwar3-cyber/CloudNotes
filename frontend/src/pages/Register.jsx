@@ -2,6 +2,7 @@ import "./Login.css";
 import { useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Register() {
 
@@ -25,19 +26,17 @@ function Register() {
                 password
             });
 
-            alert("Registration Successful!");
+            toast.success("Registration Successful 🎉");
 
             navigate("/");
 
         } catch (error) {
 
-            console.log("Full Error:", error);
+            console.log(error);
 
-            console.log("Response:", error.response);
-
-            console.log("Data:", error.response?.data);
-
-            alert("Registration Failed");
+            toast.error(
+                error.response?.data?.detail || "Registration Failed"
+            );
 
         }
 

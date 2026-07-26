@@ -141,3 +141,131 @@
     font-weight: bold;
 
 }
+
+.loading-text {
+
+    text-align: center;
+
+    color: #2563eb;
+
+    margin-top: 40px;
+
+}
+
+.empty-state {
+
+    text-align: center;
+
+    margin-top: 60px;
+
+    padding: 40px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+
+}
+
+.empty-state h2 {
+
+    font-size: 60px;
+
+    margin-bottom: 10px;
+
+}
+
+.empty-state h3 {
+
+    color: #2563eb;
+
+    margin-bottom: 10px;
+
+}
+
+.empty-state p {
+
+    color: #666;
+
+}
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.welcome-user{
+
+    font-weight:bold;
+
+    color:#2563eb;
+
+}
+
+
+/* ============================= */
+/* Mobile Responsive */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-container {
+
+        padding: 15px;
+
+    }
+
+    .dashboard-header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        align-items: center;
+
+        text-align: center;
+
+    }
+
+    .header-right {
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+    .dashboard-title {
+
+        font-size: 30px;
+
+    }
+
+    .note-form {
+
+        padding: 15px;
+
+    }
+
+    .note-form input,
+    .note-form textarea {
+
+        font-size: 15px;
+
+    }
+
+    .pagination {
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+}
