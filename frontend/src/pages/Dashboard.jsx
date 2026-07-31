@@ -331,6 +331,12 @@ const searchNotes = async (query) => {
 
             <div className="note-form">
 
+                {isEditing && (
+                    <h3 className="editing-text">
+                        ✏️ Editing Note
+                    </h3>
+                )}
+
                 <input
                     type="text"
                     placeholder="Title"
@@ -344,25 +350,38 @@ const searchNotes = async (query) => {
                     onChange={(e) => setContent(e.target.value)}
                 />
 
-                <button
-                    onClick={
-                        isEditing
-                            ? updateNote
-                            : createNote
-                    }
+                <div className="form-buttons">
 
-                    disabled={creating}
-                >
-
-                    {
-                        creating
+                    <button
+                        onClick={isEditing ? updateNote : createNote}
+                        disabled={
+                            creating ||
+                            !title.trim() ||
+                            !content.trim()
+                        }
+                    >
+                        {creating
                             ? "Creating..."
                             : isEditing
                                 ? "Update Note"
-                                : "Add Note"
-                    }
+                                : "Add Note"}
+                    </button>
 
-                </button>
+                    {isEditing && (
+                        <button
+                            className="cancel-btn"
+                            onClick={() => {
+                                setIsEditing(false);
+                                setEditingId(null);
+                                setTitle("");
+                                setContent("");
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    )}
+
+                </div>
 
             </div>
 
