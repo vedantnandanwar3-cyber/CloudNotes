@@ -1,40 +1,71 @@
 .dashboard-container {
-    max-width: 900px;
+
+    max-width: 1100px;
+
     margin: 40px auto;
-    padding: 20px;
+
+    padding: 30px;
+
+    min-height: 100vh;
+
 }
 
 .dashboard-title {
-    text-align: center;
-    font-size: 36px;
+
+    font-size: 34px;
+
     color: #2563eb;
-    margin-bottom: 30px;
+
+    font-weight: 700;
+
+    margin: 0;
+
 }
 
-.note-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.note-form{
 
-    background: white;
-    padding: 20px;
+    background:white;
 
-    border-radius: 12px;
+    padding:35px;
 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius:18px;
 
-    margin-bottom: 30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    margin-bottom:35px;
+
 }
 
 .note-form input,
-.note-form textarea {
-    padding: 12px;
+.note-form textarea{
 
-    font-size: 16px;
+    padding:15px;
 
-    border: 1px solid #ccc;
+    font-size:16px;
 
-    border-radius: 8px;
+    border:1px solid #ddd;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+.note-form input:focus,
+.note-form textarea:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+
 }
 
 .note-form textarea {
@@ -42,21 +73,38 @@
     resize: vertical;
 }
 
-.note-form button {
-    padding: 12px;
+.note-form button{
 
-    background: #2563eb;
+    width:180px;
 
-    color: white;
+    padding:15px;
 
-    border: none;
+    border:none;
 
-    border-radius: 8px;
+    border-radius:12px;
 
-    cursor: pointer;
+    background:#2563eb;
 
-    font-size: 16px;
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
 }
+
+.note-form button:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+}
+
 
 .note-form button:hover {
     background: #1d4ed8;
@@ -70,7 +118,15 @@
 
     align-items: center;
 
-    margin-bottom: 30px;
+    background: white;
+
+    padding: 20px 30px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+
+    margin-bottom: 35px;
 
 }
 
@@ -84,11 +140,21 @@
 
     padding: 10px 20px;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     cursor: pointer;
 
     font-size: 15px;
+
+    font-weight: 600;
+
+    transition: .3s;
+
+}
+
+.logout-btn:hover {
+
+    background: #dc2626;
 
 }
 
@@ -190,21 +256,29 @@
 
 }
 
-.header-right{
+.header-right {
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
+    align-items: center;
 
-    gap:15px;
+    gap: 15px;
 
 }
 
-.welcome-user{
+.welcome-user {
 
-    font-weight:bold;
+    background: #eef4ff;
 
-    color:#2563eb;
+    color: #2563eb;
+
+    padding: 10px 16px;
+
+    border-radius: 30px;
+
+    font-weight: 600;
+
+    font-size: 15px;
 
 }
 
@@ -216,21 +290,26 @@
 @media (max-width: 768px) {
 
     .dashboard-container {
-
-        padding: 15px;
-
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 25px;
+        min-height: 100vh;
     }
 
-    .dashboard-header {
+    .dashboard-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
 
-        flex-direction: column;
+        background:white;
 
-        gap: 15px;
+        padding:20px 30px;
 
-        align-items: center;
+        border-radius:15px;
 
-        text-align: center;
+        box-shadow:0 8px 25px rgba(0,0,0,.08);
 
+        margin-bottom:30px;
     }
 
     .header-right {
@@ -292,4 +371,94 @@
 .editing-text {
     color: #0d6efd;
     margin-bottom: 10px;
+}
+
+/* ================= Search Box ================= */
+
+input[type="text"] {
+
+    transition: .3s;
+
+}
+
+input[type="text"]:focus {
+
+    outline: none;
+
+    border: 1px solid #2563eb;
+
+    box-shadow: 0 0 10px rgba(37,99,235,.2);
+
+}
+/* ================= Buttons ================= */
+
+button {
+
+    transition: .25s ease;
+
+}
+
+button:hover {
+
+    transform: translateY(-2px);
+
+}
+
+button:active {
+
+    transform: scale(.98);
+
+}
+.theme-btn {
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+}
+
+.theme-btn:hover {
+
+    background: #1d4ed8;
+
+}
+
+.search-input{
+
+    width:100%;
+
+    padding:14px 18px;
+
+    margin:25px 0;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:white;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+.search-input:focus{
+
+    outline:none;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+
 }

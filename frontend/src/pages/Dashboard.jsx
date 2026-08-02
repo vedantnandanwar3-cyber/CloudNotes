@@ -20,6 +20,9 @@ function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [creating, setCreating] = useState(false);
     const [username, setUsername] = useState("");
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.getItem("theme") === "dark";
+    });
 
     // ---------------- FETCH NOTES ----------------
 const fetchNotes = async () => {
@@ -281,6 +284,18 @@ const searchNotes = async (query) => {
 
     }, [page]);
 
+    useEffect(() => {
+
+        if (darkMode) {
+            document.body.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.body.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+
+    }, [darkMode]);
+
     return (
         <div className="dashboard-container">
 
@@ -295,21 +310,21 @@ const searchNotes = async (query) => {
                 <div className="header-right">
 
                     <span className="welcome-user">
-
                         👋 {username}
-
                     </span>
 
                     <button
-
-                        className="logout-btn"
-
-                        onClick={logout}
-
+                        className="theme-btn"
+                        onClick={() => setDarkMode(!darkMode)}
                     >
+                        {darkMode ? "☀️ Light" : "🌙 Dark"}
+                    </button>
 
+                    <button
+                        className="logout-btn"
+                        onClick={logout}
+                    >
                         Logout
-
                     </button>
 
                 </div>
@@ -317,15 +332,13 @@ const searchNotes = async (query) => {
             </div>
 
             <input
+                className="search-input"
                 type="text"
-                placeholder="🔍 Search notes..."
+                placeholder="🔍 Search your notes..."
                 value={search}
                 onChange={(e) => {
-
                     setSearch(e.target.value);
-
                     searchNotes(e.target.value);
-
                 }}
             />
 

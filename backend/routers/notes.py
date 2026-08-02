@@ -39,7 +39,7 @@ def create_note(
     new_note = Note(
         title=note.title,
         content=note.content,
-        user_id=current_user.id
+        owner_id=current_user.id
     )
 
     db.add(new_note)
@@ -62,7 +62,7 @@ def get_notes(
     
     
     total_notes = db.query(Note).filter(
-        Note.user_id == current_user.id
+        Note.owner_id == current_user.id
     ).count()
     
     total_pages = max(1, math.ceil(total_notes / limit))
@@ -70,7 +70,7 @@ def get_notes(
 
     notes = (
         db.query(Note)
-        .filter(Note.user_id == current_user.id)
+        .filter(Note.owner_id == current_user.id)
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -93,7 +93,7 @@ def search_notes(
 ):
 
     notes = db.query(Note).filter(
-        Note.user_id == current_user.id,
+        Note.owner_id == current_user.id,
         Note.title.contains(q)
     ).all()
 
@@ -110,7 +110,7 @@ def update_note(
 
     existing_note = db.query(Note).filter(
         Note.id == note_id,
-        Note.user_id == current_user.id
+        Note.owner_id == current_user.id
     ).first()
 
     if not existing_note:
@@ -139,7 +139,7 @@ def delete_note(
 
     note = db.query(Note).filter(
         Note.id == note_id,
-        Note.user_id == current_user.id
+        Note.owner_id == current_user.id
     ).first()   
 
     if not note:
@@ -153,4 +153,32 @@ def delete_note(
 
     return {
         "message": "Note deleted successfully"
+    }
+    
+@router.put("/{note_id}/pin")
+def toggle_pin(
+    note_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    note = db.query(Note).filter(
+        Note.id == note_id,
+        Note.owner_id == current_user.id
+    ).first()
+
+    if not note:
+        raise HTTPException(
+            status_code=404,
+            detail="Note not found"
+        )
+
+    note.is_pinned = not note.is_pinned
+
+    db.commit()
+    db.refresh(note)
+
+    return {
+        "message": "Pin status updated",
+        "is_pinned": note.is_pinned
     }

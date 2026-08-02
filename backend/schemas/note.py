@@ -19,6 +19,7 @@ class NoteResponse(BaseModel):
     id: int
     title: str
     content: str
+    is_pinned: bool
 
     class Config:
         from_attributes = True

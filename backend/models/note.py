@@ -1,15 +1,15 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
 from database import Base
-
 
 class Note(Base):
     __tablename__ = "notes"
 
     id = Column(Integer, primary_key=True, index=True)
 
-    title = Column(String, nullable=False)
+    title = Column(String)
 
-    content = Column(String, nullable=False)
+    content = Column(Text)
 
-    user_id = Column(Integer, ForeignKey("users.id"))
-    
+    is_pinned = Column(Boolean, default=False)
+
+    owner_id = Column(Integer, ForeignKey("users.id"))

@@ -1,13 +1,35 @@
-.note-card {
-    background: white;
+.note-card{
 
-    padding: 20px;
+    background:white;
 
-    margin: 20px 0;
+    padding:25px;
 
-    border-radius: 12px;
+    border-radius:18px;
 
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom:22px;
+
+    border-left:6px solid #2563eb;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.note-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+.note-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
 }
 
 .note-card h3 {
@@ -52,20 +74,44 @@
     opacity: 0.9;
 }
 
-.note-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+.note-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:20px;
+
 }
 
-.edit-btn {
-    background: #2563eb;
-    color: white;
+.edit-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
 }
 
-.delete-btn {
-    background: #ef4444;
-    color: white;
+.delete-btn{
+
+    background:#ef4444;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
 }
 
 .edit-btn:hover {
