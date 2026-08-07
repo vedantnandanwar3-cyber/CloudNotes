@@ -11,6 +11,7 @@ function Dashboard() {
     const [notes, setNotes] = useState([]);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [color, setColor] = useState("#ffffff");
     const [editingId, setEditingId] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
@@ -19,10 +20,12 @@ function Dashboard() {
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
     const [creating, setCreating] = useState(false);
+    const [updating, setUpdating] = useState(false);
     const [username, setUsername] = useState("");
     const [darkMode, setDarkMode] = useState(() => {
         return localStorage.getItem("theme") === "dark";
     });
+
 
     // ---------------- FETCH NOTES ----------------
 const fetchNotes = async () => {
@@ -126,7 +129,8 @@ const searchNotes = async (query) => {
                 "/notes",
                 {
                     title,
-                    content
+                    content,
+                    color
                 },
                 {
                     headers: {
@@ -139,6 +143,7 @@ const searchNotes = async (query) => {
 
             setTitle("");
             setContent("");
+            setColor("#ffffff");
 
             toast.success("Note created successfully 🎉");
             setCreating(false);
@@ -221,12 +226,15 @@ const searchNotes = async (query) => {
         setEditingId(note.id);
         setTitle(note.title);
         setContent(note.content);
+        setColor(note.color);
         setIsEditing(true);
 
     };
 
     // ---------------- UPDATE NOTE ----------------
     const updateNote = async () => {
+
+        setUpdating(true);
 
         try {
 
@@ -236,7 +244,9 @@ const searchNotes = async (query) => {
                 `/notes/${editingId}`,
                 {
                     title,
-                    content
+                    content, 
+                    color
+
                 },
                 {
                     headers: {
@@ -254,6 +264,7 @@ const searchNotes = async (query) => {
             setIsEditing(false);
 
             toast.success("Note updated successfully ✏️");
+            setUpdating(false);
 
         } catch (error) {
 
@@ -262,6 +273,7 @@ const searchNotes = async (query) => {
             toast.error(
                 error.response?.data?.detail || "Failed to update note"
             );
+            setUpdating(false);
 
         }
 
@@ -363,6 +375,63 @@ const searchNotes = async (query) => {
                     onChange={(e) => setContent(e.target.value)}
                 />
 
+                <div className="color-picker">
+
+                    <p>🎨 Choose Note Color</p>
+
+                    <div className="colors">
+
+                        <button
+                            className={`color-btn ${
+                                color === "#ffffff" ? "selected" : ""
+                            }`}
+                            style={{ backgroundColor: "#ffffff" }}
+                            onClick={() => setColor("#ffffff")}
+                        ></button>
+
+                        <button
+                            className={`color-btn ${
+                                color === "#FFF9C4" ? "selected" : ""
+                            }`}
+                            style={{ backgroundColor: "#FFF9C4" }}
+                            onClick={() => setColor("#FFF9C4")}
+                        ></button>
+
+                        <button
+                            className={`color-btn ${
+                                color === "#C8E6C9" ? "selected" : ""
+                            }`}
+                            style={{ backgroundColor: "#C8E6C9" }}
+                            onClick={() => setColor("#C8E6C9")}
+                        ></button>
+
+                        <button
+                            className={`color-btn ${
+                                color === "#BBDEFB" ? "selected" : ""
+                            }`}
+                            style={{ backgroundColor: "#BBDEFB" }}
+                            onClick={() => setColor("#BBDEFB")}
+                        ></button>
+
+                        <button
+                            className={`color-btn ${
+                                color === "#F8BBD0" ? "selected" : ""
+                            }`}
+                            style={{ backgroundColor: "#F8BBD0" }}
+                            onClick={() => setColor("#F8BBD0")}
+                        ></button>
+
+                        <button
+                            className={`color-btn ${
+                                color === "#E1BEE7" ? "selected" : ""
+                            }`}
+                            style={{ backgroundColor: "#E1BEE7" }}
+                            onClick={() => setColor("#E1BEE7")}
+                        ></button>
+
+                    </div>
+
+                </div>
                 <div className="form-buttons">
 
                     <button
@@ -373,11 +442,15 @@ const searchNotes = async (query) => {
                             !content.trim()
                         }
                     >
-                        {creating
-                            ? "Creating..."
-                            : isEditing
-                                ? "Update Note"
-                                : "Add Note"}
+                        {isEditing
+                            ? updating
+                                ? "Updating..."
+                                : "Update Note"
+                            : creating
+                                ? "Creating..."
+                                : "Add Note"
+
+                        }
                     </button>
 
                     {isEditing && (
@@ -408,13 +481,24 @@ const searchNotes = async (query) => {
 
                 <div className="empty-state">
 
-                    <h2>📝</h2>
+                    <h2>
+                        {search.trim() ? "🔍" : "📝"}
+                    </h2>
 
-                    <h3>No Notes Yet</h3>
+                    <h3>
+                        {search.trim()
+                            ? "No matching notes found"
+                            : "No Notes Yet"}
+                    </h3>
 
-                    <p>Create your first note to get started.</p>
+                    <p>
+                        {search.trim()
+                            ? "Try another keyword."
+                            : "Create your first note to get started."}
+                    </p>
 
                 </div>
+    
 
             ) : (
 
@@ -425,6 +509,7 @@ const searchNotes = async (query) => {
                         note={note}
                         onDelete={deleteNote}
                         onEdit={startEditing}
+                        fetchNotes={fetchNotes}
                     />
 
                 ))

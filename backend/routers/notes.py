@@ -7,6 +7,8 @@ from models.note import Note
 from models.user import User
 from schemas.note import NoteCreate, NoteResponse
 from security import verify_token
+import math
+from sqlalchemy import desc
 
 router = APIRouter(
     prefix="/notes",
@@ -39,6 +41,7 @@ def create_note(
     new_note = Note(
         title=note.title,
         content=note.content,
+        color=note.color,
         owner_id=current_user.id
     )
 
@@ -71,6 +74,10 @@ def get_notes(
     notes = (
         db.query(Note)
         .filter(Note.owner_id == current_user.id)
+        .order_by(
+            desc(Note.is_pinned),
+            desc(Note.id)
+        )
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -121,6 +128,7 @@ def update_note(
 
     existing_note.title = note.title
     existing_note.content = note.content
+    existing_note.color = note.color
 
     db.commit()
     db.refresh(existing_note)

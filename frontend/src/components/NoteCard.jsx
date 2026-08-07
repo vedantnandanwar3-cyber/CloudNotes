@@ -5,18 +5,23 @@ import toast from "react-hot-toast";
 function NoteCard({ note, onDelete, onEdit, fetchNotes }) {
 
     const handlePin = async () => {
-
         try {
+            const token = localStorage.getItem("token");
 
-            await api.put(
+            console.log("Token:", token);
+            console.log("Note ID:", note.id);
+
+            const response = await api.put(
                 `/notes/${note.id}/pin`,
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
+
+            console.log("SUCCESS", response.data);
 
             toast.success(
                 note.is_pinned ? "Note Unpinned 📌" : "Note Pinned 📌"
@@ -25,17 +30,41 @@ function NoteCard({ note, onDelete, onEdit, fetchNotes }) {
             fetchNotes();
 
         } catch (error) {
-
-            toast.error("Failed to update pin");
-
+            console.log("STATUS:", error.response?.status);
+            console.log("DATA:", error.response?.data);
+            console.log("URL:", error.config?.url);
             console.log(error);
 
+            toast.error("Failed to update pin");
         }
-
     };
 
+    const createdDate = new Date(note.created_at);
+
+        const formattedDate = createdDate.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+        });
+
+        const formattedTime = createdDate.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+
     return (
-        <div className="note-card">
+        <div
+            className={`note-card ${note.is_pinned ? "pinned" : ""}`}
+            style={{
+                backgroundColor: note.color
+            }}
+        >
+
+            {note.is_pinned && (
+                <div className="pin-badge">
+                    📌 PINNED
+                </div>
+            )}
 
             <h3>
                 {note.is_pinned && "📌 "}
@@ -43,6 +72,16 @@ function NoteCard({ note, onDelete, onEdit, fetchNotes }) {
             </h3>
 
             <p>{note.content}</p>
+
+            <div className="note-date">
+
+                <small>📅 {formattedDate}</small>
+
+                <br />
+
+                <small>🕒 {formattedTime}</small>
+
+            </div>
 
             <div className="note-actions">
 

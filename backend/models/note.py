@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime
 from database import Base
+from datetime import datetime
 
 class Note(Base):
     __tablename__ = "notes"
@@ -13,3 +14,7 @@ class Note(Base):
     is_pinned = Column(Boolean, default=False)
 
     owner_id = Column(Integer, ForeignKey("users.id"))
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    color = Column(String, default="#ffffff")
