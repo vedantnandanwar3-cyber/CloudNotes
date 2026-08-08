@@ -12,16 +12,21 @@ function Dashboard() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [color, setColor] = useState("#ffffff");
+    const [category, setCategory] = useState("General");
     const [editingId, setEditingId] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("All");
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
     const [creating, setCreating] = useState(false);
     const [updating, setUpdating] = useState(false);
     const [username, setUsername] = useState("");
+    const [totalNotes, setTotalNotes] = useState(0);
+    const [pinnedNotes, setPinnedNotes] = useState(0);
+    const [colorsUsed, setColorsUsed] = useState(0);
     const [darkMode, setDarkMode] = useState(() => {
         return localStorage.getItem("theme") === "dark";
     });
@@ -47,7 +52,18 @@ const fetchNotes = async () => {
 
 
         setNotes(response.data.notes);
+
         setTotalPages(response.data.total_pages);
+
+        setTotalNotes(response.data.total_notes);
+
+        setPinnedNotes(
+            response.data.notes.filter(note => note.is_pinned).length
+        );
+
+        setColorsUsed(
+            new Set(response.data.notes.map(note => note.color)).size
+        );
 
         setLoading(false);
 
@@ -130,7 +146,8 @@ const searchNotes = async (query) => {
                 {
                     title,
                     content,
-                    color
+                    color,
+                    category
                 },
                 {
                     headers: {
@@ -227,6 +244,7 @@ const searchNotes = async (query) => {
         setTitle(note.title);
         setContent(note.content);
         setColor(note.color);
+        setCategory(note.category);
         setIsEditing(true);
 
     };
@@ -245,7 +263,8 @@ const searchNotes = async (query) => {
                 {
                     title,
                     content, 
-                    color
+                    color,
+                    category
 
                 },
                 {
@@ -343,6 +362,25 @@ const searchNotes = async (query) => {
 
             </div>
 
+            <div className="stats-container">
+
+                <div className="stat-card">
+                    <h3>📝 Total Notes</h3>
+                    <h2>{totalNotes}</h2>
+                </div>
+
+                <div className="stat-card">
+                    <h3>📌 Pinned</h3>
+                    <h2>{pinnedNotes}</h2>
+                </div>
+
+                <div className="stat-card">
+                    <h3>🎨 Colors</h3>
+                    <h2>{colorsUsed}</h2>
+                </div>
+
+            </div>
+
             <input
                 className="search-input"
                 type="text"
@@ -353,6 +391,45 @@ const searchNotes = async (query) => {
                     searchNotes(e.target.value);
                 }}
             />
+
+            <div className="category-filter">
+
+            <button
+            onClick={()=>setSelectedCategory("All")}
+            className={selectedCategory==="All"?"active":""}
+            >
+            All
+            </button>
+
+            <button
+            onClick={()=>setSelectedCategory("Study")}
+            className={selectedCategory==="Study"?"active":""}
+            >
+            📚 Study
+            </button>
+
+            <button
+            onClick={()=>setSelectedCategory("Work")}
+            className={selectedCategory==="Work"?"active":""}
+            >
+            💼 Work
+            </button>
+
+            <button
+            onClick={()=>setSelectedCategory("Personal")}
+            className={selectedCategory==="Personal"?"active":""}
+            >
+            🏠 Personal
+            </button>
+
+            <button
+            onClick={()=>setSelectedCategory("Ideas")}
+            className={selectedCategory==="Ideas"?"active":""}
+            >
+            💡 Ideas
+            </button>
+
+            </div>
 
             <div className="note-form">
 
@@ -369,11 +446,28 @@ const searchNotes = async (query) => {
                     onChange={(e) => setTitle(e.target.value)}
                 />
 
-                <textarea
-                    placeholder="Write your note..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
+                <div className="category-select">
+
+                    <label>🏷️ Category</label>
+
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+
+                        <option value="General">📌 General</option>
+
+                        <option value="Study">📚 Study</option>
+
+                        <option value="Work">💼 Work</option>
+
+                        <option value="Personal">🏠 Personal</option>
+
+                        <option value="Ideas">💡 Ideas</option>
+
+                    </select>
+
+                </div>
 
                 <div className="color-picker">
 
@@ -502,7 +596,15 @@ const searchNotes = async (query) => {
 
             ) : (
 
-                notes.map((note) => (
+                notes
+                .filter((note)=>{
+
+                    if(selectedCategory==="All") return true;
+
+                    return note.category===selectedCategory;
+
+                })
+                .map((note)=>(
 
                     <NoteCard
                         key={note.id}

@@ -60,11 +60,19 @@ function NoteCard({ note, onDelete, onEdit, fetchNotes }) {
             }}
         >
 
-            {note.is_pinned && (
-                <div className="pin-badge">
-                    📌 PINNED
-                </div>
-            )}
+            <div className="category-badge">
+
+                {note.category === "Study" && "📚 STUDY"}
+
+                {note.category === "Work" && "💼 WORK"}
+
+                {note.category === "Personal" && "🏠 PERSONAL"}
+
+                {note.category === "Ideas" && "💡 IDEAS"}
+
+                {note.category === "General" && "📌 GENERAL"}
+
+            </div>
 
             <h3>
                 {note.is_pinned && "📌 "}

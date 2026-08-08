@@ -42,6 +42,7 @@ def create_note(
         title=note.title,
         content=note.content,
         color=note.color,
+        category=note.category,
         owner_id=current_user.id
     )
 
@@ -129,6 +130,7 @@ def update_note(
     existing_note.title = note.title
     existing_note.content = note.content
     existing_note.color = note.color
+    existing_note.category = note.category
 
     db.commit()
     db.refresh(existing_note)

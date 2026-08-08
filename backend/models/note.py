@@ -18,3 +18,5 @@ class Note(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     
     color = Column(String, default="#ffffff")
+    
+    category = Column(String, default="General")
