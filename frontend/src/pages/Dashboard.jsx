@@ -446,6 +446,13 @@ const searchNotes = async (query) => {
                     onChange={(e) => setTitle(e.target.value)}
                 />
 
+                <textarea
+                    placeholder="Write your note..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    rows="6"
+                />
+
                 <div className="category-select">
 
                     <label>🏷️ Category</label>
@@ -454,17 +461,11 @@ const searchNotes = async (query) => {
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                     >
-
                         <option value="General">📌 General</option>
-
                         <option value="Study">📚 Study</option>
-
                         <option value="Work">💼 Work</option>
-
                         <option value="Personal">🏠 Personal</option>
-
                         <option value="Ideas">💡 Ideas</option>
-
                     </select>
 
                 </div>

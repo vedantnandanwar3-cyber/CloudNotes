@@ -60,7 +60,7 @@ function NoteCard({ note, onDelete, onEdit, fetchNotes }) {
             }}
         >
 
-            <div className="category-badge">
+            <div className={`category-badge ${note.category?.toLowerCase()}`}>
 
                 {note.category === "Study" && "📚 STUDY"}
 

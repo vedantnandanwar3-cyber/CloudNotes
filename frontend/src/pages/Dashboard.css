@@ -559,8 +559,58 @@ button:active {
 /* Category Dropdown */
 /* ========================= */
 
-.category-select{
-    margin:20px 0;
+/* ========================= */
+/* Category Selector */
+/* ========================= */
+
+.category-select {
+    width: 100%;
+    margin: 18px 0 24px;
+}
+
+.category-select label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.category-select select {
+    width: 100%;
+    height: 52px;
+
+    padding: 0 16px;
+
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+
+    background: #f8fafc;
+    color: #374151;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.category-select select:hover {
+    border-color: #2563eb;
+    background: #ffffff;
+}
+
+.category-select select:focus {
+    outline: none;
+
+    border-color: #2563eb;
+
+    background: #ffffff;
+
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
 .category-select label{
@@ -592,40 +642,88 @@ button:active {
 }
 
 
-.category-filter{
+/* ========================= */
+/* Category Filters */
+/* ========================= */
 
-display:flex;
+.category-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-justify-content:center;
+    gap: 10px;
 
-gap:12px;
+    margin: 24px 0 30px;
 
-flex-wrap:wrap;
-
-margin:25px 0;
-
+    flex-wrap: wrap;
 }
 
-.category-filter button{
+.category-filter button {
+    border: 1px solid #e5e7eb;
 
-padding:10px 18px;
+    padding: 10px 18px;
 
-border:none;
+    border-radius: 999px;
 
-border-radius:25px;
+    background: #ffffff;
 
-background:#ececec;
+    color: #4b5563;
 
-cursor:pointer;
+    font-size: 14px;
+    font-weight: 600;
 
-transition:.25s;
+    cursor: pointer;
 
+    transition: all 0.25s ease;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
-.category-filter button.active{
+.category-filter button:hover {
+    transform: translateY(-2px);
 
-background:#2563eb;
+    border-color: #2563eb;
 
-color:white;
+    color: #2563eb;
 
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.category-filter button.active {
+    background: #2563eb;
+
+    border-color: #2563eb;
+
+    color: white;
+
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+}
+
+.note-form textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: 16px;
+
+    margin-top: 15px;
+
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+
+    background: #ffffff;
+    color: #333;
+
+    font-size: 16px;
+    font-family: inherit;
+
+    resize: vertical;
+
+    box-sizing: border-box;
+
+    transition: 0.25s ease;
+}
+
+.note-form textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
